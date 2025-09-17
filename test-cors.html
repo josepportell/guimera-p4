@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>Testing CORS from Frontend to Backend</h1>
+    <button onclick="testAPI()">Test API Call</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Testing...';
+
+            try {
+                console.log('Trying to reach: https://guimera-ai-backend.onrender.com/api/chat');
+
+                const response = await fetch('https://guimera-ai-backend.onrender.com/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'test from browser',
+                        sessionId: ''
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                result.innerHTML = `
+                    <h3>✅ Success!</h3>
+                    <p><strong>Response:</strong> ${data.response}</p>
+                    <p><strong>Session ID:</strong> ${data.sessionId}</p>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                result.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Type:</strong> ${error.name}</p>
+                    <p>Check browser console for details</p>
+                `;
+            }
+        }
+
+        // Test on page load
+        window.addEventListener('load', () => {
+            console.log('Page loaded, ready to test CORS');
+            console.log('Current origin:', window.location.origin);
+        });
+    </script>
+</body>
+</html>
