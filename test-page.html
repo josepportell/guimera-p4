@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Guimera AI Assistant</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .checklist {
+            list-style-type: none;
+            padding: 0;
+        }
+        .checklist li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .checklist input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .test-results {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Guimera AI Assistant - Test Suite</h1>
+
+    <div class="test-section">
+        <h2>1. Backend API Test</h2>
+        <button onclick="testBackend()">Test Backend Health</button>
+        <button onclick="testChat()">Test Chat API</button>
+        <div id="backend-results" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Frontend Application Test</h2>
+        <div class="info">
+            <strong>Instructions:</strong> The application should load below. Test the chat functionality and check the items in the list as you verify them.
+        </div>
+
+        <h3>Testing Checklist:</h3>
+        <ul class="checklist">
+            <li><input type="checkbox" id="load"> Application loads without errors</li>
+            <li><input type="checkbox" id="ui"> UI elements are visible (header, input, buttons)</li>
+            <li><input type="checkbox" id="welcome"> Welcome message is displayed</li>
+            <li><input type="checkbox" id="input"> Can type in the chat input</li>
+            <li><input type="checkbox" id="send"> Can send messages (try: "Hola, què és Guimera?")</li>
+            <li><input type="checkbox" id="response"> AI responds appropriately</li>
+            <li><input type="checkbox" id="catalan"> Interface is in Catalan</li>
+            <li><input type="checkbox" id="context"> Follow-up questions maintain context</li>
+            <li><input type="checkbox" id="clear"> "Nova conversa" button clears chat</li>
+            <li><input type="checkbox" id="mobile"> Responsive design (resize window to test)</li>
+        </ul>
+
+        <iframe src="http://localhost:5173" id="app-iframe"></iframe>
+    </div>
+
+    <div class="test-section">
+        <h2>3. WordPress Integration Test</h2>
+        <div class="info">
+            <strong>Note:</strong> This simulates how the application will appear when embedded in WordPress.
+        </div>
+        <ul class="checklist">
+            <li><input type="checkbox" id="iframe-load"> Application loads correctly in iframe</li>
+            <li><input type="checkbox" id="iframe-interact"> Can interact with chat in iframe</li>
+            <li><input type="checkbox" id="iframe-scroll"> No scrolling issues within iframe</li>
+            <li><input type="checkbox" id="iframe-responsive"> Iframe adapts to container size</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test Results Summary</h2>
+        <button onclick="generateReport()">Generate Test Report</button>
+        <div id="test-report"></div>
+    </div>
+
+    <script>
+        async function testBackend() {
+            const results = document.getElementById('backend-results');
+            results.innerHTML = '<div class="info">Testing backend...</div>';
+
+            try {
+                // Test health endpoint
+                const healthResponse = await fetch('http://localhost:3001/api/health');
+                const healthData = await healthResponse.json();
+
+                let html = '<h3>Health Check Results:</h3>';
+                html += `<pre>${JSON.stringify(healthData, null, 2)}</pre>`;
+
+                if (healthData.status === 'ok') {
+                    html += '<div class="success">✅ Backend is healthy!</div>';
+                } else {
+                    html += '<div class="error">❌ Backend health check failed</div>';
+                }
+
+                results.innerHTML = html;
+            } catch (error) {
+                results.innerHTML = `<div class="error">❌ Backend connection failed: ${error.message}</div>`;
+            }
+        }
+
+        async function testChat() {
+            const results = document.getElementById('backend-results');
+            const existingContent = results.innerHTML;
+
+            try {
+                results.innerHTML = existingContent + '<div class="info">Testing chat API...</div>';
+
+                const chatResponse = await fetch('http://localhost:3001/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'Hola, això és una prova. Pots respondre breument?'
+                    })
+                });
+
+                const chatData = await chatResponse.json();
+
+                let html = '<h3>Chat API Results:</h3>';
+                if (chatData.response) {
+                    html += '<div class="success">✅ Chat API working!</div>';
+                    html += `<strong>Response preview:</strong> ${chatData.response.substring(0, 200)}...`;
+                    html += `<br><strong>Session ID:</strong> ${chatData.sessionId}`;
+                } else {
+                    html += '<div class="error">❌ Chat API failed</div>';
+                    html += `<pre>${JSON.stringify(chatData, null, 2)}</pre>`;
+                }
+
+                results.innerHTML = existingContent + html;
+            } catch (error) {
+                results.innerHTML = existingContent + `<div class="error">❌ Chat API failed: ${error.message}</div>`;
+            }
+        }
+
+        function generateReport() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const total = checkboxes.length;
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const percentage = Math.round((checked / total) * 100);
+
+            const report = document.getElementById('test-report');
+
+            let html = `<h3>Test Summary</h3>`;
+            html += `<div class="info">`;
+            html += `<strong>Tests Completed:</strong> ${checked} / ${total} (${percentage}%)<br>`;
+            html += `<strong>Status:</strong> `;
+
+            if (percentage >= 90) {
+                html += `<span style="color: #28a745;">🎉 Excellent! Ready for deployment</span>`;
+            } else if (percentage >= 70) {
+                html += `<span style="color: #ffc107;">⚠️ Good, but review failed tests</span>`;
+            } else {
+                html += `<span style="color: #dc3545;">❌ Needs attention before deployment</span>`;
+            }
+
+            html += `</div>`;
+
+            // List failed tests
+            const failedTests = [];
+            checkboxes.forEach(cb => {
+                if (!cb.checked) {
+                    const label = cb.parentElement.textContent.trim();
+                    failedTests.push(label);
+                }
+            });
+
+            if (failedTests.length > 0) {
+                html += `<h4>Tests that need attention:</h4><ul>`;
+                failedTests.forEach(test => {
+                    html += `<li>${test}</li>`;
+                });
+                html += `</ul>`;
+            }
+
+            report.innerHTML = html;
+        }
+
+        // Auto-test backend on page load
+        window.addEventListener('load', () => {
+            setTimeout(testBackend, 1000);
+        });
+
+        // Check if iframe loads successfully
+        document.getElementById('app-iframe').addEventListener('load', () => {
+            console.log('Application iframe loaded successfully');
+        });
+
+        document.getElementById('app-iframe').addEventListener('error', () => {
+            console.error('Application iframe failed to load');
+        });
+    </script>
+</body>
+</html>
