@@ -276,11 +276,22 @@ app.post('/api/rag/reindex', async (req, res) => {
   }
 
   try {
-    const MultiDomainScraper = require('./multi-domain-scraper');
-    const scraper = new MultiDomainScraper();
+    let scraper;
+    let content;
 
-    // Scrape content
-    const content = await scraper.scrapeAllSources();
+    try {
+      // Try Playwright scraper first
+      const MultiDomainScraper = require('./multi-domain-scraper');
+      scraper = new MultiDomainScraper();
+      content = await scraper.scrapeAllSources();
+    } catch (playwrightError) {
+      console.log('Playwright scraper failed, using simple HTTP scraper:', playwrightError.message);
+
+      // Fallback to simple HTTP scraper
+      const SimpleScraper = require('./simple-scraper');
+      scraper = new SimpleScraper();
+      content = await scraper.scrapeAllSources();
+    }
 
     // Embed and store
     await ragEngine.embedAndStore(content);
