@@ -61,20 +61,65 @@ class ProgressiveIndexer {
         status: 'running'
       });
 
-      const browser = await playwright.chromium.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-      });
+      // Try Playwright first, fall back to SimpleScraper if it fails
+      let browser = null;
+      let page = null;
+      let usePlaywright = true;
 
-      const page = await browser.newPage();
-      await this.setupPage(page);
+      try {
+        browser = await playwright.chromium.launch({
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+        page = await browser.newPage();
+        await this.setupPage(page);
+        console.log('✅ Using Playwright for content extraction');
+      } catch (playwrightError) {
+        console.warn('⚠️ Playwright failed, falling back to SimpleScraper:', playwrightError.message);
+        usePlaywright = false;
+      }
 
-      const urls = await this.discoverPhase1Urls(page);
+      let urls;
+      if (usePlaywright) {
+        urls = await this.discoverPhase1Urls(page);
+      } else {
+        // Use SimpleScraper approach for URL discovery
+        const SimpleScraper = require('./simple-scraper');
+        const simpleScraper = new SimpleScraper();
+        const content = await simpleScraper.scrapeAllSources();
+
+        // Extract URLs from scraped content and use them
+        urls = [...new Set(content.map(item => item.metadata.url))];
+        console.log(`🔍 Using SimpleScraper approach: ${urls.length} URLs for Phase 1`);
+
+        // Process the content we already have
+        for (const item of content) {
+          const chunks = [item.content];
+          const embeddings = await this.createEmbeddings(chunks, item.metadata.url);
+          if (embeddings && embeddings.length > 0) {
+            await this.indexChunks(chunks, embeddings, {
+              title: item.metadata.title,
+              language: item.metadata.language,
+              author: item.metadata.author,
+              headings: item.metadata.headings
+            }, item.metadata.url);
+            this.stats.chunksCreated += chunks.length;
+            this.stats.totalCost += this.estimateCost(chunks);
+            this.stats.urlsSuccessful++;
+          } else {
+            this.stats.urlsFailed++;
+          }
+          this.stats.urlsProcessed++;
+        }
+      }
+
       console.log(`🔍 Discovered ${urls.length} URLs for Phase 1`);
 
-      await this.processBatches(page, urls);
+      if (usePlaywright) {
+        await this.processBatches(page, urls);
+        await browser.close();
+      }
 
-      await browser.close();
       await this.generateFinalReport();
 
       console.log(`✅ Phase 1 completed! Processed ${this.stats.urlsSuccessful}/${this.stats.urlsProcessed} pages`);
