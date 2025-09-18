@@ -349,8 +349,8 @@ app.post('/content/progressive-index', async (req, res) => {
         const { spawn } = require('child_process');
         const path = require('path');
 
-        const indexerScript = path.join(__dirname, 'progressive-indexer.js');
-        console.log(`📄 Running script: ${indexerScript}`);
+        const indexerScript = path.join(__dirname, 'firecrawl-indexer.js');
+        console.log(`📄 Running Firecrawl indexer script: ${indexerScript}`);
 
         const indexingProcess = spawn('node', [indexerScript], {
           cwd: __dirname,
