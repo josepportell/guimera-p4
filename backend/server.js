@@ -2,7 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const { OpenAI } = require('openai');
 const crypto = require('crypto');
+const path = require('path');
 require('dotenv').config({ silent: true });
+
+// Import admin modules
+const adminRoutes = require('./admin/admin-routes');
+const RAGSystemScheduler = require('./admin/scheduler');
+const CostTracker = require('./admin/cost-tracker');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -29,6 +35,21 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+
+// Initialize admin modules
+const scheduler = new RAGSystemScheduler();
+const costTracker = new CostTracker();
+
+// Make costTracker available to admin routes
+app.locals.costTracker = costTracker;
+
+// Admin routes
+app.use('/admin', adminRoutes);
+
+// Serve admin dashboard
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin', 'dashboard.html'));
+});
 
 const sessions = new Map();
 
@@ -201,6 +222,16 @@ app.post('/api/chat', async (req, res) => {
 
     const response = completion.choices[0].message.content;
 
+    // Track API usage and costs
+    if (completion.usage) {
+      costTracker.trackCompletion(
+        'gpt-4',
+        completion.usage.prompt_tokens,
+        completion.usage.completion_tokens,
+        'chat'
+      );
+    }
+
     // Add assistant response to conversation history
     session.messages.push({ role: 'assistant', content: response });
 
@@ -272,4 +303,13 @@ app.listen(PORT, () => {
   console.log(`🔧 OpenAI API configured: ${!!process.env.OPENAI_API_KEY}`);
   console.log(`🤖 Using GPT-4 Chat Completions API`);
   console.log(`🧹 Session cleanup enabled`);
+  console.log(`🎛️ Admin dashboard available at: /admin`);
+
+  // Start RAG scheduler if environment supports it
+  if (process.env.PINECONE_API_KEY) {
+    console.log(`⏰ Starting RAG system scheduler...`);
+    scheduler.start();
+  } else {
+    console.log(`⚠️ RAG scheduler disabled - PINECONE_API_KEY not found`);
+  }
 });

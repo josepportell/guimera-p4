@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tauler d'Administració RAG Guimerà</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            color: #007bff;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-healthy { background: #28a745; }
+        .status-warning { background: #ffc107; }
+        .status-error { background: #dc3545; }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            height: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            background: #007bff;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f1aeb5;
+            color: #721c24;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            max-width: 500px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert h4, .alert h5 {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .alert ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        .log-entry {
+            background: #f8f9fa;
+            border-left: 3px solid #007bff;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .log-timestamp {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .refresh-indicator {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎛️ Tauler d'Administració RAG Guimerà</h1>
+        <div class="subtitle">Sistema de gestió intel·ligent de continguts</div>
+    </div>
+
+    <div class="container">
+        <div class="controls">
+            <button class="btn" onclick="refreshDashboard()">
+                <span id="refresh-icon">🔄</span> Actualitzar
+            </button>
+            <button class="btn btn-warning" onclick="triggerContentUpdate()">
+                📚 Actualitzar contingut
+            </button>
+            <button class="btn btn-danger" onclick="triggerFullRefresh()">
+                🔄 Reindexació completa
+            </button>
+            <button class="btn" onclick="showCostAnalytics()">
+                💰 Anàlisi de costos
+            </button>
+            <button class="btn btn-warning" onclick="manageBudget()">
+                📊 Gestionar pressupost
+            </button>
+        </div>
+
+        <div id="alerts"></div>
+
+        <div class="dashboard-grid">
+            <!-- System Health -->
+            <div class="card">
+                <h3>🏥 Estat del sistema</h3>
+                <div id="system-health">
+                    <div class="metric">
+                        <span class="metric-label">Estat RAG</span>
+                        <span class="metric-value" id="rag-status">
+                            <span class="status-indicator status-healthy"></span>Carregant...
+                        </span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Vectors indexats</span>
+                        <span class="metric-value" id="vector-count">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Temps d'activitat</span>
+                        <span class="metric-value" id="uptime">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Statistics -->
+            <div class="card">
+                <h3>📊 Estadístiques d'ús (24h)</h3>
+                <div id="usage-stats">
+                    <div class="metric">
+                        <span class="metric-label">Consultes totals</span>
+                        <span class="metric-value" id="total-queries">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Ús RAG</span>
+                        <span class="metric-value" id="rag-usage">-</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="rag-usage-bar"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Confiança mitjana</span>
+                        <span class="metric-value" id="avg-confidence">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Status -->
+            <div class="card">
+                <h3>📚 Estat del contingut</h3>
+                <div id="content-status">
+                    <div class="metric">
+                        <span class="metric-label">Última actualització</span>
+                        <span class="metric-value" id="last-update">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Fonts disponibles</span>
+                        <span class="metric-value" id="sources-count">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Font principal</span>
+                        <span class="metric-value" id="top-source">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div class="card">
+                <h3>⚡ Rendiment</h3>
+                <div id="performance">
+                    <div class="metric">
+                        <span class="metric-label">Temps resposta mitjà</span>
+                        <span class="metric-value" id="avg-response-time">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Processant</span>
+                        <span class="metric-value" id="processing-status">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Topics -->
+            <div class="card">
+                <h3>🔥 Temes populars</h3>
+                <div id="popular-topics">
+                    <div class="metric-label">Carregant temes...</div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <h3>📋 Activitat recent</h3>
+                <div id="recent-activity">
+                    <div class="metric-label">Carregant activitat...</div>
+                </div>
+            </div>
+
+            <!-- AI Cost Management -->
+            <div class="card">
+                <h3>💰 Gestió de costos IA</h3>
+                <div id="cost-management">
+                    <div class="metric">
+                        <span class="metric-label">Cost avui</span>
+                        <span class="metric-value" id="daily-cost">$0.00</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Cost aquest mes</span>
+                        <span class="metric-value" id="monthly-cost">$0.00</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Tokens totals (24h)</span>
+                        <span class="metric-value" id="daily-tokens">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Cost per token mitjà</span>
+                        <span class="metric-value" id="avg-token-cost">$0.000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Status -->
+            <div class="card">
+                <h3>📊 Estat del pressupost</h3>
+                <div id="budget-status">
+                    <div class="metric">
+                        <span class="metric-label">Pressupost diari</span>
+                        <span class="metric-value" id="daily-budget-usage">0%</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="daily-budget-bar"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Pressupost mensual</span>
+                        <span class="metric-value" id="monthly-budget-usage">0%</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="monthly-budget-bar"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Model més usat</span>
+                        <span class="metric-value" id="top-model">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_TOKEN = 'guimera-admin-2024'; // In production, use proper auth
+        const API_BASE = window.location.origin;
+
+        let refreshInterval;
+
+        async function apiCall(endpoint, options = {}) {
+            const url = `${API_BASE}/admin${endpoint}?token=${ADMIN_TOKEN}`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Admin-Token': ADMIN_TOKEN,
+                        ...options.headers
+                    },
+                    ...options
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+
+        async function refreshDashboard() {
+            const refreshIcon = document.getElementById('refresh-icon');
+            refreshIcon.className = 'refresh-indicator';
+
+            try {
+                const [dashboard, costAnalytics, budgetStatus] = await Promise.all([
+                    apiCall('/dashboard'),
+                    apiCall('/costs/analytics?timeframe=1d'),
+                    apiCall('/costs/budget')
+                ]);
+
+                updateDashboard(dashboard);
+                updateCostDashboard(costAnalytics, budgetStatus);
+                clearAlerts();
+            } catch (error) {
+                showAlert('Error carregant el tauler: ' + error.message, 'error');
+            } finally {
+                refreshIcon.className = '';
+            }
+        }
+
+        function updateDashboard(data) {
+            // System Health
+            const ragStatus = data.system.ragEnabled ? 'Actiu' : 'Inactiu';
+            const statusClass = data.system.ragEnabled ? 'status-healthy' : 'status-error';
+            document.getElementById('rag-status').innerHTML =
+                `<span class="status-indicator ${statusClass}"></span>${ragStatus}`;
+
+            document.getElementById('vector-count').textContent =
+                data.system.totalVectors.toLocaleString();
+
+            document.getElementById('uptime').textContent =
+                formatUptime(data.system.uptime);
+
+            // Usage Stats
+            document.getElementById('total-queries').textContent = data.usage.totalQueries;
+            document.getElementById('rag-usage').textContent = `${data.usage.ragUsageRate}%`;
+            document.getElementById('rag-usage-bar').style.width = `${data.usage.ragUsageRate}%`;
+            document.getElementById('avg-confidence').textContent = `${data.usage.avgConfidence}%`;
+
+            // Content Status
+            document.getElementById('last-update').textContent =
+                formatDate(data.content.lastUpdate);
+            document.getElementById('sources-count').textContent =
+                data.content.sourcesAvailable.length;
+            document.getElementById('top-source').textContent =
+                data.content.topSources[0]?.source || 'Cap';
+
+            // Performance
+            document.getElementById('avg-response-time').textContent =
+                `${data.usage.avgResponseTime}ms`;
+            document.getElementById('processing-status').textContent = 'Disponible';
+
+            // Popular Topics
+            updatePopularTopics(data.topics);
+
+            // Issues/Alerts
+            if (data.issues && data.issues.length > 0) {
+                showAlert(`${data.issues.length} problemes detectats`, 'warning');
+            }
+        }
+
+        function updateCostDashboard(costAnalytics, budgetStatus) {
+            try {
+                // Cost Analytics
+                if (costAnalytics && costAnalytics.summary) {
+                    document.getElementById('daily-cost').textContent =
+                        `$${costAnalytics.summary.totalCost.toFixed(4)}`;
+                    document.getElementById('daily-tokens').textContent =
+                        costAnalytics.summary.totalTokens.toLocaleString();
+                    document.getElementById('avg-token-cost').textContent =
+                        `$${costAnalytics.summary.avgCostPerToken.toFixed(6)}`;
+
+                    // Top model
+                    if (costAnalytics.modelBreakdown && costAnalytics.modelBreakdown.length > 0) {
+                        document.getElementById('top-model').textContent =
+                            costAnalytics.modelBreakdown[0].name || costAnalytics.modelBreakdown[0].model;
+                    }
+                }
+
+                // Budget Status
+                if (budgetStatus && budgetStatus.budget) {
+                    const budget = budgetStatus.budget;
+
+                    // Monthly cost (from budget status)
+                    document.getElementById('monthly-cost').textContent =
+                        `$${budget.monthly.spent.toFixed(2)}`;
+
+                    // Daily budget
+                    document.getElementById('daily-budget-usage').textContent =
+                        `${budget.daily.percentage}%`;
+                    document.getElementById('daily-budget-bar').style.width =
+                        `${Math.min(budget.daily.percentage, 100)}%`;
+
+                    // Set color based on budget usage
+                    const dailyBar = document.getElementById('daily-budget-bar');
+                    if (budget.daily.percentage > 90) {
+                        dailyBar.style.backgroundColor = '#dc3545'; // Red
+                    } else if (budget.daily.percentage > 70) {
+                        dailyBar.style.backgroundColor = '#ffc107'; // Yellow
+                    } else {
+                        dailyBar.style.backgroundColor = '#007bff'; // Blue
+                    }
+
+                    // Monthly budget
+                    document.getElementById('monthly-budget-usage').textContent =
+                        `${budget.monthly.percentage}%`;
+                    document.getElementById('monthly-budget-bar').style.width =
+                        `${Math.min(budget.monthly.percentage, 100)}%`;
+
+                    // Set color based on budget usage
+                    const monthlyBar = document.getElementById('monthly-budget-bar');
+                    if (budget.monthly.percentage > 90) {
+                        monthlyBar.style.backgroundColor = '#dc3545'; // Red
+                    } else if (budget.monthly.percentage > 70) {
+                        monthlyBar.style.backgroundColor = '#ffc107'; // Yellow
+                    } else {
+                        monthlyBar.style.backgroundColor = '#007bff'; // Blue
+                    }
+                }
+
+                // Budget alerts
+                if (budgetStatus && budgetStatus.alerts && budgetStatus.alerts.length > 0) {
+                    budgetStatus.alerts.forEach(alert => {
+                        showAlert(alert.message, alert.severity);
+                    });
+                }
+
+            } catch (error) {
+                console.error('Error updating cost dashboard:', error);
+                showAlert('Error actualitzant dades de costos', 'warning');
+            }
+        }
+
+        function updatePopularTopics(topics) {
+            const container = document.getElementById('popular-topics');
+
+            if (!topics || topics.length === 0) {
+                container.innerHTML = '<div class="metric-label">Cap consulta recent</div>';
+                return;
+            }
+
+            container.innerHTML = topics.map(topic => `
+                <div class="metric">
+                    <span class="metric-label">${topic.topic}</span>
+                    <span class="metric-value">${topic.count}</span>
+                </div>
+            `).join('');
+        }
+
+        async function triggerContentUpdate() {
+            try {
+                showAlert('Iniciant actualització de contingut...', 'info');
+                const result = await apiCall('/content/refresh', {
+                    method: 'POST',
+                    body: JSON.stringify({ sources: 'all', priority: 'normal' })
+                });
+
+                showAlert(`Actualització completada: ${result.documentsProcessed} documents processats`, 'success');
+                setTimeout(refreshDashboard, 2000);
+            } catch (error) {
+                showAlert('Error en l\'actualització: ' + error.message, 'error');
+            }
+        }
+
+        async function triggerFullRefresh() {
+            if (!confirm('Això reindexarà tot el contingut. Continuar?')) return;
+
+            try {
+                showAlert('Iniciant reindexació completa...', 'info');
+                const result = await apiCall('/content/refresh', {
+                    method: 'POST',
+                    body: JSON.stringify({ sources: 'all', priority: 'high' })
+                });
+
+                showAlert('Reindexació completa iniciada', 'success');
+                setTimeout(refreshDashboard, 2000);
+            } catch (error) {
+                showAlert('Error en la reindexació: ' + error.message, 'error');
+            }
+        }
+
+        async function showCostAnalytics() {
+            try {
+                const [analytics30d, expensiveRequests, pricing] = await Promise.all([
+                    apiCall('/costs/analytics?timeframe=30d'),
+                    apiCall('/costs/expensive?limit=5'),
+                    apiCall('/costs/pricing')
+                ]);
+
+                let analyticsHtml = `
+                    <h4>Analítiques de cost (30 dies)</h4>
+                    <p><strong>Cost total:</strong> $${analytics30d.summary.totalCost.toFixed(4)}</p>
+                    <p><strong>Tokens totals:</strong> ${analytics30d.summary.totalTokens.toLocaleString()}</p>
+                    <p><strong>Peticions totals:</strong> ${analytics30d.summary.totalRequests}</p>
+                    <p><strong>Cost mitjà per petició:</strong> $${analytics30d.summary.avgCostPerRequest.toFixed(6)}</p>
+
+                    <h5>Models més usats:</h5>
+                    <ul>
+                `;
+
+                analytics30d.modelBreakdown.forEach(model => {
+                    analyticsHtml += `<li>${model.name}: $${model.cost.toFixed(4)} (${model.requests} peticions)</li>`;
+                });
+
+                analyticsHtml += `
+                    </ul>
+                    <h5>Peticions més cares:</h5>
+                    <ul>
+                `;
+
+                expensiveRequests.expensiveRequests.forEach(req => {
+                    const date = new Date(req.timestamp).toLocaleString('ca-ES');
+                    analyticsHtml += `<li>${req.model}: ${req.costFormatted} - ${req.totalTokens} tokens (${date})</li>`;
+                });
+
+                analyticsHtml += '</ul>';
+
+                showAlert(analyticsHtml, 'info');
+            } catch (error) {
+                showAlert('Error carregant analítiques de cost: ' + error.message, 'error');
+            }
+        }
+
+        async function manageBudget() {
+            const currentDaily = prompt('Límit pressupost diari (USD):', '5.00');
+            const currentMonthly = prompt('Límit pressupost mensual (USD):', '100.00');
+
+            if (currentDaily === null || currentMonthly === null) return;
+
+            const daily = parseFloat(currentDaily);
+            const monthly = parseFloat(currentMonthly);
+
+            if (isNaN(daily) || isNaN(monthly) || daily <= 0 || monthly <= 0) {
+                showAlert('Els límits han de ser números positius', 'error');
+                return;
+            }
+
+            try {
+                const result = await apiCall('/costs/budget', {
+                    method: 'POST',
+                    body: JSON.stringify({ daily, monthly })
+                });
+
+                showAlert(`Límits actualitzats: Diari $${daily}, Mensual $${monthly}`, 'success');
+                setTimeout(refreshDashboard, 1000);
+            } catch (error) {
+                showAlert('Error actualitzant límits: ' + error.message, 'error');
+            }
+        }
+
+        function showAlert(message, type = 'info') {
+            const alertsContainer = document.getElementById('alerts');
+            const alertClass = type === 'error' ? 'alert-error' :
+                             type === 'warning' ? 'alert-warning' :
+                             type === 'success' ? 'alert-success' : 'alert-info';
+
+            const alert = document.createElement('div');
+            alert.className = `alert ${alertClass}`;
+
+            // Check if message contains HTML
+            if (message.includes('<')) {
+                alert.innerHTML = message;
+            } else {
+                alert.textContent = message;
+            }
+
+            alertsContainer.appendChild(alert);
+
+            // Longer timeout for detailed analytics
+            const timeout = type === 'info' && message.includes('<') ? 15000 : 5000;
+            setTimeout(() => {
+                alert.remove();
+            }, timeout);
+        }
+
+        function clearAlerts() {
+            document.getElementById('alerts').innerHTML = '';
+        }
+
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${hours}h ${minutes}m`;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ca-ES') + ' ' + date.toLocaleTimeString('ca-ES');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshDashboard();
+
+            // Auto-refresh every 30 seconds
+            refreshInterval = setInterval(refreshDashboard, 30000);
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

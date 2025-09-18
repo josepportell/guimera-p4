@@ -1,0 +1,37 @@
+{
+  "name": "guimera-rag-system",
+  "version": "1.0.0",
+  "description": "Multi-domain RAG system for Guimera knowledge base",
+  "main": "enhanced-server.js",
+  "scripts": {
+    "start": "node enhanced-server.js",
+    "dev": "nodemon enhanced-server.js",
+    "scrape": "node multi-domain-scraper.js",
+    "reindex": "node scripts/reindex.js",
+    "test": "node scripts/test-rag.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "openai": "^4.20.1",
+    "@pinecone-database/pinecone": "^1.1.2",
+    "langchain": "^0.1.0",
+    "playwright": "^1.40.0",
+    "cheerio": "^1.0.0-rc.12",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [
+    "rag",
+    "vector-database",
+    "knowledge-base",
+    "guimera",
+    "museum",
+    "chatbot"
+  ],
+  "author": "Guimera AI Team",
+  "license": "MIT"
+}
