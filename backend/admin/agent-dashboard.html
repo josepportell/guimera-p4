@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Power-Admin Agent Monitor - Guimerà AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #00ff88;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        .dashboard-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            color: #ffd700;
+            font-size: 1.5em;
+        }
+
+        .agent-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00ff88;
+        }
+
+        .agent-card.busy {
+            border-left-color: #ff6b6b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .agent-name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .agent-status {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-idle {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .status-busy {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        .query-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .query-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .query-text {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .query-meta {
+            font-size: 0.8em;
+            opacity: 0.7;
+            display: flex;
+            gap: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn.primary {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .btn.danger {
+            background: #ff6b6b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .secret-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Power-Admin Agent Monitor</h1>
+        <div class="subtitle">Real-time monitoring of Guimerà AI Agents & Deep Learning Systems</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn primary" onclick="refreshData()">🔄 Refresh</button>
+        <button class="btn" onclick="exportData()">📊 Export Data</button>
+        <button class="btn danger" onclick="resetMonitor()">🗑️ Reset Monitor</button>
+        <button class="btn" onclick="toggleAutoRefresh()">⏰ Auto Refresh: <span id="autoStatus">OFF</span></button>
+    </div>
+
+    <div id="content">
+        <div class="loading">
+            🔍 Loading agent monitoring data...
+        </div>
+    </div>
+
+    <div class="secret-info">
+        🔐 Power-Admin Access • URL: ?agent_monitor=guimera_power_admin_2024
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let autoRefreshInterval = null;
+        let isAutoRefresh = false;
+
+        // Check if we have the secret parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const agentMonitor = urlParams.get('agent_monitor');
+
+        if (agentMonitor !== 'guimera_power_admin_2024') {
+            document.getElementById('content').innerHTML = `
+                <div class="error">
+                    <h2>🚫 Access Denied</h2>
+                    <p>This is a restricted power-admin interface.</p>
+                    <p>Please use the correct secret URL parameter.</p>
+                </div>
+            `;
+        } else {
+            // Initialize dashboard
+            loadDashboard();
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/agent-monitor?secret=guimera_power_admin_2024`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                renderDashboard(data);
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <h2>❌ Error Loading Dashboard</h2>
+                        <p>${error.message}</p>
+                        <p>Make sure the backend is running and accessible.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderDashboard(data) {
+            const { metrics, agents, recentQueries, systemInfo } = data;
+
+            document.getElementById('content').innerHTML = `
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">${metrics.totalQueries}</div>
+                        <div class="metric-label">Total Queries</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${Math.round(metrics.averageResponseTime)}ms</div>
+                        <div class="metric-label">Avg Response Time</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${metrics.errorRate.toFixed(1)}%</div>
+                        <div class="metric-label">Error Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${metrics.activeAgents}</div>
+                        <div class="metric-label">Active Agents</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sections">
+                    <div class="section">
+                        <h2>🤖 Active Agents</h2>
+                        <div id="agents-list">
+                            ${agents.map(agent => `
+                                <div class="agent-card ${agent.status === 'busy' ? 'busy' : ''}">
+                                    <div class="agent-header">
+                                        <div class="agent-name">${agent.id}</div>
+                                        <div class="agent-status status-${agent.status}">${agent.status.toUpperCase()}</div>
+                                    </div>
+                                    <div class="agent-details">
+                                        <div><strong>Type:</strong> ${agent.type}</div>
+                                        <div><strong>Queries:</strong> ${agent.queryCount}</div>
+                                        <div><strong>Avg Time:</strong> ${Math.round(agent.averageTime)}ms</div>
+                                        <div><strong>Uptime:</strong> ${formatUptime(agent.uptime)}</div>
+                                        ${agent.currentTask ? `<div><strong>Current:</strong> ${agent.currentTask.substring(0, 50)}...</div>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>📋 Recent Queries</h2>
+                        <div id="queries-list">
+                            ${recentQueries.slice(0, 10).map(query => `
+                                <div class="query-item">
+                                    <div class="query-header">
+                                        <strong>${query.agentId}</strong>
+                                        <span class="status-${query.status}">${query.status}</span>
+                                    </div>
+                                    <div class="query-text">"${query.query.substring(0, 80)}..."</div>
+                                    <div class="query-meta">
+                                        <span>⏱️ ${query.duration ? query.duration + 'ms' : 'Processing...'}</span>
+                                        <span>🕐 ${new Date(query.startTime).toLocaleTimeString()}</span>
+                                        <span>📊 ${query.steps.length} steps</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section" style="grid-column: 1 / -1; margin-top: 20px;">
+                    <h2>💻 System Information</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div><strong>Node.js:</strong> ${systemInfo.nodeVersion}</div>
+                        <div><strong>Uptime:</strong> ${formatUptime(systemInfo.uptime * 1000)}</div>
+                        <div><strong>Platform:</strong> ${systemInfo.platform}</div>
+                        <div><strong>Memory:</strong> ${Math.round(systemInfo.memoryUsage.used / 1024 / 1024)}MB</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatUptime(ms) {
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (days > 0) return `${days}d ${hours % 24}h`;
+            if (hours > 0) return `${hours}h ${minutes % 60}m`;
+            if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+            return `${seconds}s`;
+        }
+
+        function refreshData() {
+            loadDashboard();
+        }
+
+        async function exportData() {
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/agent-monitor/export?secret=guimera_power_admin_2024`);
+                const data = await response.json();
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `agent-monitor-export-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('Error exporting data: ' + error.message);
+            }
+        }
+
+        async function resetMonitor() {
+            if (!confirm('Are you sure you want to reset all monitoring data?')) return;
+
+            try {
+                await fetch(`${API_BASE}/api/admin/agent-monitor/reset?secret=guimera_power_admin_2024`, {
+                    method: 'POST'
+                });
+                loadDashboard();
+            } catch (error) {
+                alert('Error resetting monitor: ' + error.message);
+            }
+        }
+
+        function toggleAutoRefresh() {
+            isAutoRefresh = !isAutoRefresh;
+            const statusEl = document.getElementById('autoStatus');
+
+            if (isAutoRefresh) {
+                statusEl.textContent = 'ON';
+                autoRefreshInterval = setInterval(loadDashboard, 5000); // Refresh every 5 seconds
+            } else {
+                statusEl.textContent = 'OFF';
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

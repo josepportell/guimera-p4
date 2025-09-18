@@ -6,6 +6,7 @@ const GuimeraRAGEngine = require('./rag-engine');
 const MCPGuimeraRAGEngine = require('./mcp-rag-engine');
 const CostTracker = require('./admin/cost-tracker');
 const adminRoutes = require('./admin/admin-routes');
+const agentMonitor = require('./agent-monitor');
 require('dotenv').config({ silent: true });
 
 const app = express();
@@ -122,6 +123,41 @@ app.get('/admin/dashboard.html', adminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'admin', 'dashboard.html'));
 });
 
+// Power-Admin Agent Monitor (secret access)
+app.get('/admin/agent-monitor.html', (req, res) => {
+  const agentMonitorParam = req.query.agent_monitor;
+  if (agentMonitorParam !== 'guimera_power_admin_2024') {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+  res.sendFile(path.join(__dirname, 'admin', 'agent-dashboard.html'));
+});
+
+// Agent monitoring API endpoints (secret access)
+app.get('/api/admin/agent-monitor', (req, res) => {
+  const secret = req.query.secret;
+  if (secret !== 'guimera_power_admin_2024') {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+  res.json(agentMonitor.getDashboardData());
+});
+
+app.get('/api/admin/agent-monitor/export', (req, res) => {
+  const secret = req.query.secret;
+  if (secret !== 'guimera_power_admin_2024') {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+  res.json(agentMonitor.exportData());
+});
+
+app.post('/api/admin/agent-monitor/reset', (req, res) => {
+  const secret = req.query.secret;
+  if (secret !== 'guimera_power_admin_2024') {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+  agentMonitor.reset();
+  res.json({ success: true, message: 'Agent monitor reset' });
+});
+
 // Admin API routes
 app.use('/api/admin', adminRoutes);
 
@@ -156,9 +192,24 @@ app.post('/api/chat', async (req, res) => {
     if (shouldUseMCP) {
       try {
         console.log('🚀 Using MCP RAG mode with reranking');
+
+        // Track query start
+        const queryId = agentMonitor.startQuery('rag-enhanced', message, {
+          useMCP: true,
+          rerankModel: rerankModel,
+          sessionId: currentSessionId
+        });
+
+        agentMonitor.addStep(queryId, 'mcp-query-start', { rerankModel });
+
         const ragResponse = await mcpRagEngine.query(message, {
           useReranking: true,
           rerankModel: rerankModel
+        });
+
+        agentMonitor.addStep(queryId, 'mcp-search-complete', {
+          sources: ragResponse.sources?.length || 0,
+          confidence: ragResponse.confidence
         });
 
         response = ragResponse.answer;
@@ -166,30 +217,88 @@ app.post('/api/chat', async (req, res) => {
         confidence = ragResponse.confidence;
         searchResults = ragResponse.searchResults;
         engine = 'mcp';
+
+        // Track successful completion
+        agentMonitor.completeQuery(queryId, {
+          response: response.substring(0, 100) + '...',
+          sources: sources.length,
+          confidence,
+          engine
+        });
       } catch (mcpError) {
         console.error('MCP RAG query failed, falling back to standard RAG:', mcpError.message);
+
+        // Track MCP failure
+        agentMonitor.completeQuery(queryId, null, mcpError.message);
+
         if (shouldUseRAG) {
+          // Track fallback to standard RAG
+          const fallbackQueryId = agentMonitor.startQuery('rag-standard', message, {
+            fallbackFrom: 'mcp',
+            sessionId: currentSessionId
+          });
+
           const ragResponse = await ragEngine.query(message);
           response = ragResponse.answer;
           sources = ragResponse.sources;
           confidence = ragResponse.confidence;
           searchResults = ragResponse.searchResults;
           engine = 'standard-fallback';
+
+          agentMonitor.completeQuery(fallbackQueryId, {
+            response: response.substring(0, 100) + '...',
+            sources: sources.length,
+            confidence,
+            engine
+          });
         } else {
+          // Track GPT-only fallback
+          const gptQueryId = agentMonitor.startQuery('gpt-standard', message, {
+            fallbackFrom: 'mcp',
+            sessionId: currentSessionId
+          });
+
           response = await getStandardResponse(message, session);
           engine = 'gpt-only';
+
+          agentMonitor.completeQuery(gptQueryId, {
+            response: response.substring(0, 100) + '...',
+            engine
+          });
         }
       }
     } else if (shouldUseRAG) {
       try {
         console.log('🔍 Using standard RAG mode');
+
+        // Track standard RAG query
+        const ragQueryId = agentMonitor.startQuery('rag-standard', message, {
+          useMCP: false,
+          sessionId: currentSessionId
+        });
+
+        agentMonitor.addStep(ragQueryId, 'standard-rag-start');
+
         const ragResponse = await ragEngine.query(message);
+
+        agentMonitor.addStep(ragQueryId, 'standard-search-complete', {
+          sources: ragResponse.sources?.length || 0,
+          confidence: ragResponse.confidence
+        });
 
         response = ragResponse.answer;
         sources = ragResponse.sources;
         confidence = ragResponse.confidence;
         searchResults = ragResponse.searchResults;
         engine = 'standard';
+
+        // Track successful completion
+        agentMonitor.completeQuery(ragQueryId, {
+          response: response.substring(0, 100) + '...',
+          sources: sources.length,
+          confidence,
+          engine
+        });
 
         // Store RAG query in session
         session.ragHistory.push({
@@ -203,13 +312,40 @@ app.post('/api/chat', async (req, res) => {
 
       } catch (ragError) {
         console.error('RAG query failed, falling back to standard mode:', ragError.message);
+
+        // Track RAG failure
+        agentMonitor.completeQuery(ragQueryId, null, ragError.message);
+
+        // Track GPT fallback
+        const gptFallbackId = agentMonitor.startQuery('gpt-standard', message, {
+          fallbackFrom: 'rag',
+          sessionId: currentSessionId
+        });
+
         response = await getStandardResponse(message, session);
         engine = 'gpt-only';
+
+        agentMonitor.completeQuery(gptFallbackId, {
+          response: response.substring(0, 100) + '...',
+          engine
+        });
       }
     } else {
       console.log('💬 Using standard mode');
+
+      // Track standard GPT mode
+      const gptQueryId = agentMonitor.startQuery('gpt-standard', message, {
+        sessionId: currentSessionId,
+        reason: 'no-rag-available'
+      });
+
       response = await getStandardResponse(message, session);
       engine = 'gpt-only';
+
+      agentMonitor.completeQuery(gptQueryId, {
+        response: response.substring(0, 100) + '...',
+        engine
+      });
     }
 
     // Add to conversation history
