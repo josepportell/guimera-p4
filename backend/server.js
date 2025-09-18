@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { OpenAI } = require('openai');
 const crypto = require('crypto');
-require('dotenv').config();
+require('dotenv').config({ silent: true });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,8 +11,22 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+// Debug environment variables
+console.log('🔍 Environment check:');
+console.log('OPENAI_API_KEY exists:', !!process.env.OPENAI_API_KEY);
+console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN);
+console.log('PORT:', process.env.PORT);
+
+// Parse CORS origins
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
+  : ['http://localhost:5173'];
+
+console.log('🌐 CORS origins:', corsOrigins);
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173'
+  origin: corsOrigins,
+  credentials: true
 }));
 app.use(express.json());
 
