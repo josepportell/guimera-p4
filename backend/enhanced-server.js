@@ -317,6 +317,81 @@ app.get('/api/rag/stats', async (req, res) => {
   }
 });
 
+// Progressive indexing endpoint (direct implementation)
+app.post('/content/progressive-index', async (req, res) => {
+  // Admin authentication
+  const token = req.headers['x-admin-token'] || req.query.token;
+  const validToken = process.env.ADMIN_TOKEN || 'guimera-admin-2024';
+
+  if (token !== validToken) {
+    return res.status(401).json({ error: 'No autoritzat. Es requereix accés d\'administrador.' });
+  }
+
+  const { maxPages = 500, source = 'guimera.info', priority = 'normal' } = req.body;
+  const indexingId = Date.now().toString();
+
+  try {
+    // Return immediately with indexing ID (process runs in background)
+    res.json({
+      success: true,
+      indexingId,
+      message: `Indexació progressiva iniciada: ${maxPages} pàgines de ${source}`,
+      estimatedDuration: `${Math.ceil(maxPages / 4)} minuts`,
+      status: 'running'
+    });
+
+    // Run progressive indexing in background
+    setImmediate(async () => {
+      try {
+        console.log(`🚀 Starting progressive indexing: ${maxPages} pages from ${source}`);
+
+        const { spawn } = require('child_process');
+        const path = require('path');
+
+        const indexerScript = path.join(__dirname, 'progressive-indexer.js');
+        console.log(`📄 Running script: ${indexerScript}`);
+
+        const indexingProcess = spawn('node', [indexerScript], {
+          cwd: __dirname,
+          env: {
+            ...process.env,
+            MAX_PAGES: maxPages.toString(),
+            SOURCE_URL: source
+          },
+          stdio: 'pipe'
+        });
+
+        let output = '';
+        let errorOutput = '';
+
+        indexingProcess.stdout.on('data', (data) => {
+          output += data.toString();
+          console.log(`Progressive Indexer: ${data}`);
+        });
+
+        indexingProcess.stderr.on('data', (data) => {
+          errorOutput += data.toString();
+          console.error(`Progressive Indexer Error: ${data}`);
+        });
+
+        indexingProcess.on('close', (code) => {
+          console.log(`Progressive indexing completed with code: ${code}`);
+        });
+
+      } catch (error) {
+        console.error('Progressive indexing error:', error);
+      }
+    });
+
+  } catch (error) {
+    console.error('Progressive indexing startup error:', error);
+    res.status(500).json({
+      error: 'Error iniciant la indexació progressiva',
+      details: error.message
+    });
+  }
+});
+
 // Clean up old sessions
 setInterval(() => {
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
