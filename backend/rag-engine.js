@@ -8,9 +8,17 @@ class GuimeraRAGEngine {
       apiKey: process.env.OPENAI_API_KEY
     });
 
-    this.pinecone = new Pinecone({
+    // Backward compatible Pinecone initialization
+    const pineconeConfig = {
       apiKey: process.env.PINECONE_API_KEY
-    });
+    };
+
+    // Add environment if available (for older SDK versions)
+    if (process.env.PINECONE_ENVIRONMENT) {
+      pineconeConfig.environment = process.env.PINECONE_ENVIRONMENT;
+    }
+
+    this.pinecone = new Pinecone(pineconeConfig);
 
     this.index = null;
   }
