@@ -413,7 +413,7 @@
         let refreshInterval;
 
         async function apiCall(endpoint, options = {}) {
-            const url = `${API_BASE}/admin${endpoint}?token=${ADMIN_TOKEN}`;
+            const url = `${API_BASE}/api/admin${endpoint}?token=${ADMIN_TOKEN}`;
 
             try {
                 const response = await fetch(url, {
