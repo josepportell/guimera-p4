@@ -230,10 +230,9 @@ class MultiDomainScraper {
 
       // Extract headings for structure
       const headings = Array.from(mainElement.querySelectorAll('h1, h2, h3, h4, h5, h6'))
-        .map(h => ({
-          level: parseInt(h.tagName.charAt(1)),
-          text: h.innerText.trim()
-        }));
+        .map(h => h.innerText.trim())
+        .filter(text => text.length > 0)
+        .slice(0, 5);
 
       return {
         title: document.title || '',
