@@ -293,8 +293,17 @@ router.post('/content/progressive-index', async (req, res) => {
         console.log(`🚀 Starting progressive indexing: ${maxPages} pages from ${source}`);
 
         const { spawn } = require('child_process');
-        const indexingProcess = spawn('node', ['progressive-indexer.js'], {
-          cwd: __dirname,
+        const path = require('path');
+
+        // Backend root directory (one level up from admin)
+        const backendRoot = path.join(__dirname, '..');
+        const indexerScript = path.join(backendRoot, 'progressive-indexer.js');
+
+        console.log(`📁 Working directory: ${backendRoot}`);
+        console.log(`📄 Running script: ${indexerScript}`);
+
+        const indexingProcess = spawn('node', [indexerScript], {
+          cwd: backendRoot,
           env: {
             ...process.env,
             MAX_PAGES: maxPages.toString(),
