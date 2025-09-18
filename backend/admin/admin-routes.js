@@ -204,9 +204,9 @@ router.post('/content/refresh', async (req, res) => {
     });
   }
 
+  const updateId = Date.now().toString();
   try {
     // Log content update start
-    const updateId = Date.now().toString();
     analyticsData.contentUpdates.push({
       id: updateId,
       startTime: new Date().toISOString(),
@@ -215,15 +215,13 @@ router.post('/content/refresh', async (req, res) => {
       status: 'running'
     });
 
-    // Start scraping process
-    const scraper = new MultiDomainScraper();
+    // Use SimpleScraper for reliable scraping (no Playwright dependency)
+    console.log('Using SimpleScraper for content refresh (reliable HTTP scraper)');
+    const SimpleScraper = require('../simple-scraper');
+    const scraper = new SimpleScraper();
 
-    let content;
-    if (sources === 'all') {
-      content = await scraper.scrapeAllSources();
-    } else {
-      content = await scraper.scrapeSpecificSources(sources);
-    }
+    // SimpleScraper only supports scrapeAllSources for now
+    const content = await scraper.scrapeAllSources();
 
     // Re-embed and store
     const ragEngine = new GuimeraRAGEngine();
