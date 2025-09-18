@@ -8,9 +8,10 @@ class GuimeraRAGEngine {
       apiKey: process.env.OPENAI_API_KEY
     });
 
-    // Pinecone initialization - modern SDK auto-detects environment
+    // Pinecone initialization with environment parameter
     this.pinecone = new Pinecone({
-      apiKey: process.env.PINECONE_API_KEY
+      apiKey: process.env.PINECONE_API_KEY,
+      environment: process.env.PINECONE_ENVIRONMENT || 'aped-4627-b74a'
     });
 
     this.index = null;
