@@ -29,9 +29,10 @@ class GuimeraRAGEngine {
 
   // Embed and store content in vector database
   async embedAndStore(content) {
-    console.log(`📚 Embedding and storing ${content.length} chunks...`);
+    try {
+      console.log(`📚 Embedding and storing ${content.length} chunks...`);
 
-    const batches = this.createBatches(content, RAG_CONFIG.embedding.batchSize);
+      const batches = this.createBatches(content, RAG_CONFIG.embedding.batchSize);
 
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
@@ -53,18 +54,25 @@ class GuimeraRAGEngine {
         }));
 
         // Upsert to Pinecone
-        await this.index.upsert(vectors);
+        console.log(`📤 Upserting ${vectors.length} vectors to Pinecone...`);
+        const upsertResponse = await this.index.upsert(vectors);
+        console.log(`✅ Batch ${i + 1} upserted successfully:`, upsertResponse);
 
       } catch (error) {
-        console.error(`Error processing batch ${i + 1}:`, error.message);
-        // Continue with next batch
+        console.error(`❌ Failed to process batch ${i + 1}:`, error.message);
+        console.error('Full error:', error);
+        throw error; // Stop execution on error instead of continuing
       }
 
       // Rate limiting
       await this.delay(1000);
     }
 
-    console.log('✅ All content embedded and stored');
+      console.log('✅ All content embedded and stored');
+    } catch (error) {
+      console.error('❌ Failed to embed and store content:', error.message);
+      throw error;
+    }
   }
 
   async generateEmbeddings(texts) {
@@ -246,9 +254,9 @@ Contingut: ${metadata.content}
       }
 
       const stats = await this.index.describeIndexStats();
-      console.log(`📊 Pinecone Stats - Vectors: ${stats.totalVectorCount}, Dimension: ${stats.dimension}`);
+      console.log(`📊 Pinecone Stats - Records: ${stats.totalRecordCount || stats.totalVectorCount || 0}, Dimension: ${stats.dimension}`);
       return {
-        totalVectors: stats.totalVectorCount,
+        totalVectors: stats.totalRecordCount || stats.totalVectorCount || 0,
         dimension: stats.dimension,
         namespaces: stats.namespaces
       };
