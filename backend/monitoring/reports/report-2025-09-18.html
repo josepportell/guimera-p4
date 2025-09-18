@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guimerà Indexing Progress Report</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 20px; }
+        .summary { background: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .metric { display: inline-block; margin-right: 30px; }
+        .metric-value { font-size: 24px; font-weight: bold; color: #0369a1; }
+        .metric-label { font-size: 14px; color: #64748b; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f8fafc; font-weight: 600; }
+        .status-indexed { color: #059669; }
+        .status-failed { color: #dc2626; }
+        .status-queued { color: #d97706; }
+        .status-processing { color: #7c3aed; }
+        .url { max-width: 300px; word-break: break-all; font-family: monospace; font-size: 12px; }
+        .error { color: #dc2626; font-size: 12px; }
+        h2 { color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        .timestamp { color: #64748b; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Guimerà Indexing Progress Report</h1>
+    <p class="timestamp">Generated: 2025-09-18T17:56:33.181Z</p>
+
+    <div class="summary">
+        <h2>📊 Summary</h2>
+        <div class="metric">
+            <div class="metric-value">0</div>
+            <div class="metric-label">Pages Indexed</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">0</div>
+            <div class="metric-label">In Queue</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">0</div>
+            <div class="metric-label">Failed</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">0</div>
+            <div class="metric-label">Total Chunks</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">0%</div>
+            <div class="metric-label">Success Rate</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">0.0000</div>
+            <div class="metric-label">Total Cost</div>
+        </div>
+    </div>
+
+    <h2>📋 Active Sessions</h2>
+    <table><thead><tr><th>sessionId</th><th>source</th><th>status</th><th>duration</th><th>discovered</th><th>indexed</th><th>failed</th><th>chunks</th><th>cost</th><th>successRate</th></tr></thead><tbody><tr><td >guimera-phas...</td><td >guimera.info</td><td class="status-running">running</td><td >35s (ongoing)</td><td ></td><td ></td><td ></td><td ></td><td >$0.0000</td><td >0%</td></tr></tbody></table>
+
+    <h2>⏳ Current Queue (0 queued, 0 processing)</h2>
+    <p>No data available</p>
+
+    <h2>📊 Recent Activity (Last 50)</h2>
+    <p>No data available</p>
+
+    <h2>❌ Error Summary</h2>
+    <table><thead><tr><th>errorType</th><th>count</th><th>lastOccurrence</th><th>affectedUrls</th></tr></thead><tbody><tr><td >unknown</td><td >1</td><td >just now</td><td >1</td></tr></tbody></table>
+
+    <h2>🔍 Recent Errors</h2>
+    <table><thead><tr><th>url</th><th>errorType</th><th>error</th><th>timestamp</th><th>attempt</th><th>session</th></tr></thead><tbody><tr><td class="url">https://www.guimera.info</td><td >unknown</td><td ></td><td >just now</td><td >1</td><td >guimera.info</td></tr></tbody></table>
+
+    <h2>⚡ Performance by Source</h2>
+    <table><thead><tr><th>source</th><th>sessions</th><th>indexed</th><th>failed</th><th>successRate</th><th>totalChunks</th><th>totalCost</th><th>avgCostPerPage</th></tr></thead><tbody><tr><td >guimera.info</td><td >1</td><td ></td><td ></td><td >0%</td><td ></td><td >$0.0000</td><td >N/A</td></tr></tbody></table>
+
+</body>
+</html>

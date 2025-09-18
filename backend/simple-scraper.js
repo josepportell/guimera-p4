@@ -111,6 +111,7 @@ class SimpleScraper {
             totalChunks: chunks.length,
             scrapedAt: new Date().toISOString(),
             language: 'ca',
+            author: 'Guimerà Official', // Default author for Pinecone compatibility
             headings: headings.slice(0, 5) // Keep first 5 headings
           }
         };

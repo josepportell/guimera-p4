@@ -292,7 +292,7 @@ class ProgressiveIndexer {
         title: document.title || '',
         text: mainElement.innerText || '',
         language: document.documentElement.lang || 'ca',
-        author: getMetaContent('author') || getMetaContent('article:author'),
+        author: getMetaContent('author') || getMetaContent('article:author') || 'Guimerà Official',
         publishedDate: getMetaContent('article:published_time') || getMetaContent('pubdate'),
         description: getMetaContent('description'),
         headings

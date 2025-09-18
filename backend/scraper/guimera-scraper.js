@@ -104,7 +104,7 @@ class GuimeraScraper {
       return {
         description: getMetaContent('description'),
         keywords: getMetaContent('keywords'),
-        author: getMetaContent('author'),
+        author: getMetaContent('author') || 'Guimerà Official',
         publishedTime: getMetaContent('article:published_time'),
         modifiedTime: getMetaContent('article:modified_time'),
         section: getMetaContent('article:section'),
