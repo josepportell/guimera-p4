@@ -46,7 +46,55 @@ class MultiDomainScraper {
   }
 
   async scrapeWebsite(sourceConfig) {
-    const browser = await playwright.chromium.launch({ headless: true });
+    // Configure browser for Render environment
+    const launchOptions = {
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu'
+      ]
+    };
+
+    // Try to find Chromium executable in common Render locations
+    try {
+      const fs = require('fs');
+      const possiblePaths = [
+        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+        '/opt/render/.cache/ms-playwright/chromium-*/chrome-linux/chrome',
+        '/opt/render/.cache/ms-playwright/chromium_headless_shell-*/chrome-linux/headless_shell',
+        require('playwright').chromium.executablePath(),
+      ].filter(Boolean);
+
+      for (const path of possiblePaths) {
+        try {
+          if (path.includes('*')) {
+            // Handle glob patterns
+            const glob = require('child_process').execSync(`ls ${path} 2>/dev/null || echo ""`, {encoding: 'utf8'}).trim();
+            if (glob && fs.existsSync(glob)) {
+              launchOptions.executablePath = glob;
+              console.log(`Found Chromium at: ${glob}`);
+              break;
+            }
+          } else if (fs.existsSync(path)) {
+            launchOptions.executablePath = path;
+            console.log(`Using Chromium at: ${path}`);
+            break;
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+    } catch (error) {
+      console.log('Using default Chromium path, detection failed:', error.message);
+    }
+
+    const browser = await playwright.chromium.launch(launchOptions);
     const page = await browser.newPage();
 
     try {
