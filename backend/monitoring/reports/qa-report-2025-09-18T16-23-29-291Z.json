@@ -1,0 +1,294 @@
+{
+  "contentVerification": [
+    {
+      "id": "guimera.info-1758202522888-3",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 3,
+      "contentLength": 998,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-4",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 4,
+      "contentLength": 994,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-1",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 1,
+      "contentLength": 992,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-1",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 1,
+      "contentLength": 992,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202611100-0",
+      "url": "https://www.guimera.info/patrimoni/",
+      "source": "guimera.info",
+      "title": "Patrimoni Cultural – de la vila de Guimerà",
+      "chunkIndex": 0,
+      "contentLength": 997,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202521490-0",
+      "url": "https://www.guimera.info/patrimoni/",
+      "source": "guimera.info",
+      "title": "Patrimoni Cultural – de la vila de Guimerà",
+      "chunkIndex": 0,
+      "contentLength": 997,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202518376-0",
+      "url": "https://www.guimera.info/museu/",
+      "source": "guimera.info",
+      "title": "Museu de Guimerà – La Cort del Batlle",
+      "chunkIndex": 0,
+      "contentLength": 685,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202607951-0",
+      "url": "https://www.guimera.info/museu/",
+      "source": "guimera.info",
+      "title": "Museu de Guimerà – La Cort del Batlle",
+      "chunkIndex": 0,
+      "contentLength": 685,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202515002-0",
+      "url": "https://www.guimera.info/",
+      "source": "guimera.info",
+      "title": "GUIMERÀ – a la Vall del Corb",
+      "chunkIndex": 0,
+      "contentLength": 1000,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-5",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 5,
+      "contentLength": 218,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-3",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 3,
+      "contentLength": 998,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-4",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 4,
+      "contentLength": 994,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-0",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 0,
+      "contentLength": 996,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-5",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 5,
+      "contentLength": 218,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202604906-0",
+      "url": "https://www.guimera.info/",
+      "source": "guimera.info",
+      "title": "GUIMERÀ – a la Vall del Corb",
+      "chunkIndex": 0,
+      "contentLength": 1000,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    }
+  ],
+  "deduplication": [],
+  "metadataQuality": [],
+  "searchTesting": [
+    {
+      "query": "Guimerà història",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    },
+    {
+      "query": "Josep Corbella",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    },
+    {
+      "query": "educació infantil",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    },
+    {
+      "query": "festes populars",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    },
+    {
+      "query": "tradicions catalanes",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    },
+    {
+      "query": "escola",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    },
+    {
+      "query": "cultura local",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    },
+    {
+      "query": "patrimoni",
+      "success": false,
+      "error": "401 Incorrect API key provided: sk-proj-****************************************************************************************************************************************TRyA. You can find your API key at https://platform.openai.com/account/api-keys.",
+      "avgRelevance": 0,
+      "results": []
+    }
+  ],
+  "summary": {
+    "overview": {
+      "totalChunksAnalyzed": 15,
+      "analysisDate": "2025-09-18T16:23:29.289Z",
+      "overallStatus": "Needs Improvement"
+    },
+    "contentQuality": {
+      "averageScore": 1,
+      "lowQualityCount": 0,
+      "commonIssues": []
+    },
+    "deduplication": {
+      "duplicatePairs": 0,
+      "duplicateRate": "0.0%",
+      "samePageDuplicates": 0,
+      "crossPageDuplicates": 0
+    },
+    "metadata": {
+      "issueCount": 0,
+      "issueRate": "0.0%"
+    },
+    "searchQuality": {
+      "successRate": "0.0%",
+      "averageRelevance": null,
+      "queriesTested": 8
+    },
+    "recommendations": [],
+    "thresholds": {
+      "similarityThreshold": 0.85,
+      "qualityScoreMin": 0.7,
+      "searchRelevanceMin": 0.6,
+      "maxChunkLength": 2000,
+      "minChunkLength": 50
+    }
+  }
+}

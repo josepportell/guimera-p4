@@ -261,6 +261,106 @@ router.post('/content/refresh', async (req, res) => {
   }
 });
 
+router.post('/content/progressive-index', async (req, res) => {
+  const { maxPages = 500, source = 'guimera.info', priority = 'normal' } = req.body;
+
+  const indexingId = Date.now().toString();
+
+  try {
+    // Log progressive indexing start
+    analyticsData.contentUpdates.push({
+      id: indexingId,
+      startTime: new Date().toISOString(),
+      sources: source,
+      priority,
+      status: 'running',
+      type: 'progressive-indexing',
+      maxPages
+    });
+
+    // Return immediately with indexing ID (process runs in background)
+    res.json({
+      success: true,
+      indexingId,
+      message: `Indexació progressiva iniciada: ${maxPages} pàgines de ${source}`,
+      estimatedDuration: `${Math.ceil(maxPages / 4)} minuts`,
+      status: 'running'
+    });
+
+    // Run progressive indexing in background
+    setImmediate(async () => {
+      try {
+        console.log(`🚀 Starting progressive indexing: ${maxPages} pages from ${source}`);
+
+        const { spawn } = require('child_process');
+        const indexingProcess = spawn('node', ['progressive-indexer.js'], {
+          cwd: __dirname,
+          env: {
+            ...process.env,
+            MAX_PAGES: maxPages.toString(),
+            SOURCE_URL: source
+          },
+          stdio: 'pipe'
+        });
+
+        let output = '';
+        let errorOutput = '';
+
+        indexingProcess.stdout.on('data', (data) => {
+          output += data.toString();
+          console.log(`Progressive Indexer: ${data}`);
+        });
+
+        indexingProcess.stderr.on('data', (data) => {
+          errorOutput += data.toString();
+          console.error(`Progressive Indexer Error: ${data}`);
+        });
+
+        indexingProcess.on('close', (code) => {
+          const updateRecord = analyticsData.contentUpdates.find(u => u.id === indexingId);
+          if (updateRecord) {
+            updateRecord.endTime = new Date().toISOString();
+            updateRecord.status = code === 0 ? 'completed' : 'failed';
+            updateRecord.output = output;
+            updateRecord.error = code !== 0 ? errorOutput : null;
+
+            // Try to extract document count from output
+            const docMatch = output.match(/(\d+)\s+documents?\s+(processed|indexed|stored)/i);
+            updateRecord.documentsProcessed = docMatch ? parseInt(docMatch[1]) : 0;
+          }
+
+          console.log(`Progressive indexing completed with code: ${code}`);
+        });
+
+      } catch (error) {
+        console.error('Progressive indexing error:', error);
+
+        const updateRecord = analyticsData.contentUpdates.find(u => u.id === indexingId);
+        if (updateRecord) {
+          updateRecord.status = 'failed';
+          updateRecord.error = error.message;
+          updateRecord.endTime = new Date().toISOString();
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Progressive indexing startup error:', error);
+
+    const updateRecord = analyticsData.contentUpdates.find(u => u.id === indexingId);
+    if (updateRecord) {
+      updateRecord.status = 'failed';
+      updateRecord.error = error.message;
+      updateRecord.endTime = new Date().toISOString();
+    }
+
+    res.status(500).json({
+      error: 'Error iniciant la indexació progressiva',
+      details: error.message
+    });
+  }
+});
+
 // =============================================================================
 // SYSTEM HEALTH & MONITORING
 // =============================================================================

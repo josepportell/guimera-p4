@@ -1,0 +1,621 @@
+{
+  "contentVerification": [
+    {
+      "id": "guimera.info-1758202522888-3",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 3,
+      "contentLength": 998,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-4",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 4,
+      "contentLength": 994,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-1",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 1,
+      "contentLength": 992,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-1",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 1,
+      "contentLength": 992,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202611100-0",
+      "url": "https://www.guimera.info/patrimoni/",
+      "source": "guimera.info",
+      "title": "Patrimoni Cultural – de la vila de Guimerà",
+      "chunkIndex": 0,
+      "contentLength": 997,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202521490-0",
+      "url": "https://www.guimera.info/patrimoni/",
+      "source": "guimera.info",
+      "title": "Patrimoni Cultural – de la vila de Guimerà",
+      "chunkIndex": 0,
+      "contentLength": 997,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202518376-0",
+      "url": "https://www.guimera.info/museu/",
+      "source": "guimera.info",
+      "title": "Museu de Guimerà – La Cort del Batlle",
+      "chunkIndex": 0,
+      "contentLength": 685,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202607951-0",
+      "url": "https://www.guimera.info/museu/",
+      "source": "guimera.info",
+      "title": "Museu de Guimerà – La Cort del Batlle",
+      "chunkIndex": 0,
+      "contentLength": 685,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202515002-0",
+      "url": "https://www.guimera.info/",
+      "source": "guimera.info",
+      "title": "GUIMERÀ – a la Vall del Corb",
+      "chunkIndex": 0,
+      "contentLength": 1000,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-5",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 5,
+      "contentLength": 218,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-3",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 3,
+      "contentLength": 998,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-4",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 4,
+      "contentLength": 994,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202522888-0",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 0,
+      "contentLength": 996,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202612534-5",
+      "url": "https://www.guimera.info/visites/",
+      "source": "guimera.info",
+      "title": "Visites – GUIMERÀ",
+      "chunkIndex": 5,
+      "contentLength": 218,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    },
+    {
+      "id": "guimera.info-1758202604906-0",
+      "url": "https://www.guimera.info/",
+      "source": "guimera.info",
+      "title": "GUIMERÀ – a la Vall del Corb",
+      "chunkIndex": 0,
+      "contentLength": 1000,
+      "qualityScore": 1,
+      "issues": [],
+      "recommendations": [],
+      "language": "ca",
+      "hasHeadings": true
+    }
+  ],
+  "deduplication": [],
+  "metadataQuality": [],
+  "searchTesting": [
+    {
+      "query": "Guimerà història",
+      "success": true,
+      "avgRelevance": 0.45,
+      "results": [
+        {
+          "id": "guimera.info-1758202522888-2",
+          "score": 0.58546263,
+          "relevanceScore": 0.6,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "el guia. A continuació hi teniu un vídeo de B&A Been Here amb el que podreu fer un passeig virtual per tot el nucli medieval de Guimerà. Si el video us agrada o bé us ajuda a decidir visitar Guimerà, ..."
+        },
+        {
+          "id": "guimera.info-1758202612534-2",
+          "score": 0.585201323,
+          "relevanceScore": 0.6,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "el guia. A continuació hi teniu un vídeo de B&A Been Here amb el que podreu fer un passeig virtual per tot el nucli medieval de Guimerà. Si el video us agrada o bé us ajuda a decidir visitar Guimerà, ..."
+        },
+        {
+          "id": "guimera.info-1758202515002-1",
+          "score": 0.576227307,
+          "relevanceScore": 0.35,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        },
+        {
+          "id": "guimera.info-1758202604906-1",
+          "score": 0.57617,
+          "relevanceScore": 0.35,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        },
+        {
+          "id": "guimera.info-1758202612534-3",
+          "score": 0.573471129,
+          "relevanceScore": 0.6,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "la cultura i història local. El Sr. i curiositats. No sempre es pot tenir el luxe de comptar amb un guia local que comparteixi les seves experiències i coneixements d'una manera tan especial!!!Moltes ..."
+        }
+      ]
+    },
+    {
+      "query": "Josep Corbella",
+      "success": true,
+      "avgRelevance": 0,
+      "results": [
+        {
+          "id": "guimera.info-1758202515002-0",
+          "score": 0.416532516,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "Vés al contingut GUIMERÀ a la Vall del Corb GUIMERÀ a la Vall del Corb Esteu a guimera.info on hi trobareu informació del poble de GUIMERÀ i de la Vall del Corb. Esteu a guimera.info on hi trobareu in..."
+        },
+        {
+          "id": "guimera.info-1758202604906-0",
+          "score": 0.415674239,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "Vés al contingut GUIMERÀ a la Vall del Corb GUIMERÀ a la Vall del Corb Esteu a guimera.info on hi trobareu informació del poble de GUIMERÀ i de la Vall del Corb. Esteu a guimera.info on hi trobareu in..."
+        },
+        {
+          "id": "guimera.info-1758202612534-4",
+          "score": 0.399859458,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "de Catalunya podem afirmar que Guimerà té tots els ingredients per situar-se al capdavant. Gràcies a l'Ajuntament vam poder contactar amb Sebastià un personatge veí del poble d'una amabilitat extrema ..."
+        },
+        {
+          "id": "guimera.info-1758202522888-4",
+          "score": 0.398718834,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "de Catalunya podem afirmar que Guimerà té tots els ingredients per situar-se al capdavant. Gràcies a l'Ajuntament vam poder contactar amb Sebastià un personatge veí del poble d'una amabilitat extrema ..."
+        },
+        {
+          "id": "guimera.info-1758202604906-1",
+          "score": 0.3953228,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        }
+      ]
+    },
+    {
+      "query": "educació infantil",
+      "success": true,
+      "avgRelevance": 0,
+      "results": [
+        {
+          "id": "guimera.info-1758202604906-4",
+          "score": 0.317531586,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "i l’edició del llibre “Guimerà i Vallsanta”. L’any 2002 vam iniciar la nostra tasca com a associació cultural i en aquests anys hem fet un seguit d’actuacions que podeu veure sintèticament en aquest a..."
+        },
+        {
+          "id": "guimera.info-1758202515002-4",
+          "score": 0.317245483,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "i l’edició del llibre “Guimerà i Vallsanta”. L’any 2002 vam iniciar la nostra tasca com a associació cultural i en aquests anys hem fet un seguit d’actuacions que podeu veure sintèticament en aquest a..."
+        },
+        {
+          "id": "guimera.info-1758202611100-1",
+          "score": 0.306259155,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202521490-1",
+          "score": 0.305915862,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202515002-1",
+          "score": 0.299430877,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        }
+      ]
+    },
+    {
+      "query": "festes populars",
+      "success": true,
+      "avgRelevance": 0,
+      "results": [
+        {
+          "id": "guimera.info-1758202611100-1",
+          "score": 0.338466644,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202521490-1",
+          "score": 0.338159591,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202612534-4",
+          "score": 0.329694778,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "de Catalunya podem afirmar que Guimerà té tots els ingredients per situar-se al capdavant. Gràcies a l'Ajuntament vam poder contactar amb Sebastià un personatge veí del poble d'una amabilitat extrema ..."
+        },
+        {
+          "id": "guimera.info-1758202522888-4",
+          "score": 0.32866478,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "de Catalunya podem afirmar que Guimerà té tots els ingredients per situar-se al capdavant. Gràcies a l'Ajuntament vam poder contactar amb Sebastià un personatge veí del poble d'una amabilitat extrema ..."
+        },
+        {
+          "id": "guimera.info-1758202515002-1",
+          "score": 0.327695876,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        }
+      ]
+    },
+    {
+      "query": "tradicions catalanes",
+      "success": true,
+      "avgRelevance": 0.1,
+      "results": [
+        {
+          "id": "guimera.info-1758202604906-4",
+          "score": 0.413959444,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "i l’edició del llibre “Guimerà i Vallsanta”. L’any 2002 vam iniciar la nostra tasca com a associació cultural i en aquests anys hem fet un seguit d’actuacions que podeu veure sintèticament en aquest a..."
+        },
+        {
+          "id": "guimera.info-1758202515002-4",
+          "score": 0.413829744,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "i l’edició del llibre “Guimerà i Vallsanta”. L’any 2002 vam iniciar la nostra tasca com a associació cultural i en aquests anys hem fet un seguit d’actuacions que podeu veure sintèticament en aquest a..."
+        },
+        {
+          "id": "guimera.info-1758202521490-1",
+          "score": 0.413160324,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202611100-1",
+          "score": 0.41312784,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202612534-4",
+          "score": 0.397266388,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "de Catalunya podem afirmar que Guimerà té tots els ingredients per situar-se al capdavant. Gràcies a l'Ajuntament vam poder contactar amb Sebastià un personatge veí del poble d'una amabilitat extrema ..."
+        }
+      ]
+    },
+    {
+      "query": "escola",
+      "success": true,
+      "avgRelevance": 0,
+      "results": [
+        {
+          "id": "guimera.info-1758202604906-5",
+          "score": 0.247142822,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "El proveïdor del servei d’allotjament web que hem triat, Dinahosting, es el que ofereix la millor tecnologia i suport tècnic per les característiques del nostre projecte. Valorem també el fet de ser u..."
+        },
+        {
+          "id": "guimera.info-1758202515002-5",
+          "score": 0.246971145,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "El proveïdor del servei d’allotjament web que hem triat, Dinahosting, es el que ofereix la millor tecnologia i suport tècnic per les característiques del nostre projecte. Valorem també el fet de ser u..."
+        },
+        {
+          "id": "guimera.info-1758202604906-1",
+          "score": 0.228668213,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        },
+        {
+          "id": "guimera.info-1758202515002-1",
+          "score": 0.228389755,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        },
+        {
+          "id": "guimera.info-1758202515002-2",
+          "score": 0.214101791,
+          "relevanceScore": 0,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "digital, Edicions de Guimera.info, Antics costums i tradicions, Bibliografia de Guimera, … Notícies i Hemeroteca Espai per trobar-hi les darreres notícies sobre Guimerà i la Vall del Corb i també la H..."
+        }
+      ]
+    },
+    {
+      "query": "cultura local",
+      "success": true,
+      "avgRelevance": 0.32,
+      "results": [
+        {
+          "id": "guimera.info-1758202611100-0",
+          "score": 0.385665923,
+          "relevanceScore": 0.35,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "Vés al contingut Patrimoni Cultural El patrimoni cultural de Guimerà es important i hem volgut tractar-lo buscant satisfer tant a persones que els mou simplement la curiositat de conèixer, com a perso..."
+        },
+        {
+          "id": "guimera.info-1758202521490-0",
+          "score": 0.385318756,
+          "relevanceScore": 0.35,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "Vés al contingut Patrimoni Cultural El patrimoni cultural de Guimerà es important i hem volgut tractar-lo buscant satisfer tant a persones que els mou simplement la curiositat de conèixer, com a perso..."
+        },
+        {
+          "id": "guimera.info-1758202612534-3",
+          "score": 0.380447388,
+          "relevanceScore": 0.5,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "la cultura i història local. El Sr. i curiositats. No sempre es pot tenir el luxe de comptar amb un guia local que comparteixi les seves experiències i coneixements d'una manera tan especial!!!Moltes ..."
+        },
+        {
+          "id": "guimera.info-1758202522888-3",
+          "score": 0.379535705,
+          "relevanceScore": 0.5,
+          "url": "https://www.guimera.info/visites/",
+          "title": "Visites – GUIMERÀ",
+          "content": "la cultura i història local. El Sr. i curiositats. No sempre es pot tenir el luxe de comptar amb un guia local que comparteixi les seves experiències i coneixements d'una manera tan especial!!!Moltes ..."
+        },
+        {
+          "id": "guimera.info-1758202515002-1",
+          "score": 0.326633483,
+          "relevanceScore": 0.25,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        }
+      ]
+    },
+    {
+      "query": "patrimoni",
+      "success": true,
+      "avgRelevance": 0.38,
+      "results": [
+        {
+          "id": "guimera.info-1758202611100-0",
+          "score": 0.453653365,
+          "relevanceScore": 0.7,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "Vés al contingut Patrimoni Cultural El patrimoni cultural de Guimerà es important i hem volgut tractar-lo buscant satisfer tant a persones que els mou simplement la curiositat de conèixer, com a perso..."
+        },
+        {
+          "id": "guimera.info-1758202521490-0",
+          "score": 0.453157425,
+          "relevanceScore": 0.7,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "Vés al contingut Patrimoni Cultural El patrimoni cultural de Guimerà es important i hem volgut tractar-lo buscant satisfer tant a persones que els mou simplement la curiositat de conèixer, com a perso..."
+        },
+        {
+          "id": "guimera.info-1758202611100-1",
+          "score": 0.368494034,
+          "relevanceScore": 0.7,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202521490-1",
+          "score": 0.368351,
+          "relevanceScore": 0.7,
+          "url": "https://www.guimera.info/patrimoni/",
+          "title": "Patrimoni Cultural – de la vila de Guimerà",
+          "content": "son les següents: Guimerà a través del temps La torre i el castell Pedres, escuts i senyors Els portals El pou de gel Església de Santa Maria Retaule de Guimerà Jujol a Guimerà Santuari de la Bovera M..."
+        },
+        {
+          "id": "guimera.info-1758202515002-1",
+          "score": 0.353038818,
+          "relevanceScore": 0.5,
+          "url": "https://www.guimera.info/",
+          "title": "GUIMERÀ – a la Vall del Corb",
+          "content": "0 des del Menú “hamburguesa” de la part superior dreta. 2. ContingutsEls continguts d’aquest espai web son els següents: Fer turisme a Guimerà Amb la informació que t’ajudarà a preparar una bona visit..."
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "overview": {
+      "totalChunksAnalyzed": 15,
+      "analysisDate": "2025-09-18T16:27:52.510Z",
+      "overallStatus": "Needs Improvement"
+    },
+    "contentQuality": {
+      "averageScore": 1,
+      "lowQualityCount": 0,
+      "commonIssues": []
+    },
+    "deduplication": {
+      "duplicatePairs": 0,
+      "duplicateRate": "0.0%",
+      "samePageDuplicates": 0,
+      "crossPageDuplicates": 0
+    },
+    "metadata": {
+      "issueCount": 0,
+      "issueRate": "0.0%"
+    },
+    "searchQuality": {
+      "successRate": "100.0%",
+      "averageRelevance": 0.15625,
+      "queriesTested": 8
+    },
+    "recommendations": [
+      {
+        "category": "Search Quality",
+        "priority": "High",
+        "issue": "Low search relevance score (0.16)",
+        "recommendation": "Review embedding model choice and consider implementing hybrid search with keyword matching"
+      }
+    ],
+    "thresholds": {
+      "similarityThreshold": 0.85,
+      "qualityScoreMin": 0.7,
+      "searchRelevanceMin": 0.6,
+      "maxChunkLength": 2000,
+      "minChunkLength": 50
+    }
+  }
+}

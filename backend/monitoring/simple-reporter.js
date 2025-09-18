@@ -410,7 +410,7 @@ class SimpleIndexingReporter {
   // ====== UTILITY METHODS ======
 
   categorizeError(error) {
-    const message = error.toLowerCase();
+    const message = (error || '').toLowerCase();
     if (message.includes('timeout')) return 'timeout';
     if (message.includes('404') || message.includes('not found')) return 'not_found';
     if (message.includes('403') || message.includes('forbidden')) return 'forbidden';
