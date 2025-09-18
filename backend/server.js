@@ -3,6 +3,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 const path = require('path');
 const GuimeraRAGEngine = require('./rag-engine');
+const MCPGuimeraRAGEngine = require('./mcp-rag-engine');
 const CostTracker = require('./admin/cost-tracker');
 const adminRoutes = require('./admin/admin-routes');
 require('dotenv').config({ silent: true });
@@ -10,20 +11,74 @@ require('dotenv').config({ silent: true });
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Initialize RAG Engine and Cost Tracker
+// Initialize RAG Engines and Cost Tracker
 const ragEngine = new GuimeraRAGEngine();
+const mcpRagEngine = new MCPGuimeraRAGEngine();
 const costTracker = new CostTracker();
 let ragReady = false;
+let mcpRagReady = false;
+
+// MCP Tools wrapper for Pinecone operations
+const mcpTools = {
+  async describeIndexStats(indexName) {
+    try {
+      // Use the MCP function directly
+      return await global.mcpDescribeIndexStats?.({ name: indexName }) || { totalVectorCount: 0, dimension: 0 };
+    } catch (error) {
+      console.error('MCP describe index stats error:', error.message);
+      return { totalVectorCount: 0, dimension: 0 };
+    }
+  },
+
+  async upsertRecords(indexName, namespace, records) {
+    try {
+      return await global.mcpUpsertRecords?.({ name: indexName, namespace, records }) || { upsertedCount: records.length };
+    } catch (error) {
+      console.error('MCP upsert error:', error.message);
+      throw error;
+    }
+  },
+
+  async searchRecords(config) {
+    try {
+      return await global.mcpSearchRecords?.(config) || { matches: [] };
+    } catch (error) {
+      console.error('MCP search error:', error.message);
+      return { matches: [] };
+    }
+  },
+
+  async rerankDocuments(model, query, documents, options = {}) {
+    try {
+      return await global.mcpRerankDocuments?.({ model, query, documents, options }) || { results: [] };
+    } catch (error) {
+      console.error('MCP rerank error:', error.message);
+      return { results: [] };
+    }
+  }
+};
 
 // Initialize RAG on startup
 async function initializeRAG() {
   try {
+    // Initialize standard RAG engine
     await ragEngine.initialize();
     ragReady = true;
-    console.log('🤖 RAG Engine ready');
+    console.log('🤖 Standard RAG Engine ready');
+
+    // Try to initialize MCP RAG engine
+    try {
+      mcpRagEngine.initialize(mcpTools);
+      mcpRagReady = true;
+      console.log('🚀 MCP RAG Engine ready');
+    } catch (mcpError) {
+      console.log('⚠️ MCP RAG Engine not available, using standard RAG only');
+      mcpRagReady = false;
+    }
   } catch (error) {
     console.error('⚠️ RAG Engine initialization failed, falling back to regular mode');
     ragReady = false;
+    mcpRagReady = false;
   }
 }
 
@@ -75,7 +130,7 @@ const sessions = new Map();
 // Enhanced chat endpoint with RAG
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message, sessionId, useRAG = true } = req.body;
+    const { message, sessionId, useRAG = true, useMCP = false, rerankModel = 'pinecone-rerank-v0' } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
@@ -92,20 +147,49 @@ app.post('/api/chat', async (req, res) => {
 
     const session = sessions.get(currentSessionId);
 
-    // Determine if we should use RAG or fallback
+    // Determine which RAG engine to use
+    const shouldUseMCP = useMCP && mcpRagReady && process.env.PINECONE_API_KEY;
     const shouldUseRAG = useRAG && ragReady && process.env.PINECONE_API_KEY;
 
-    let response, sources = [], confidence = 0, searchResults = 0;
+    let response, sources = [], confidence = 0, searchResults = 0, engine = 'standard';
 
-    if (shouldUseRAG) {
+    if (shouldUseMCP) {
       try {
-        console.log('🔍 Using RAG mode');
+        console.log('🚀 Using MCP RAG mode with reranking');
+        const ragResponse = await mcpRagEngine.query(message, {
+          useReranking: true,
+          rerankModel: rerankModel
+        });
+
+        response = ragResponse.answer;
+        sources = ragResponse.sources;
+        confidence = ragResponse.confidence;
+        searchResults = ragResponse.searchResults;
+        engine = 'mcp';
+      } catch (mcpError) {
+        console.error('MCP RAG query failed, falling back to standard RAG:', mcpError.message);
+        if (shouldUseRAG) {
+          const ragResponse = await ragEngine.query(message);
+          response = ragResponse.answer;
+          sources = ragResponse.sources;
+          confidence = ragResponse.confidence;
+          searchResults = ragResponse.searchResults;
+          engine = 'standard-fallback';
+        } else {
+          response = await getStandardResponse(message, session);
+          engine = 'gpt-only';
+        }
+      }
+    } else if (shouldUseRAG) {
+      try {
+        console.log('🔍 Using standard RAG mode');
         const ragResponse = await ragEngine.query(message);
 
         response = ragResponse.answer;
         sources = ragResponse.sources;
         confidence = ragResponse.confidence;
         searchResults = ragResponse.searchResults;
+        engine = 'standard';
 
         // Store RAG query in session
         session.ragHistory.push({
@@ -113,16 +197,19 @@ app.post('/api/chat', async (req, res) => {
           answer: response,
           sources: sources.length,
           confidence,
+          engine,
           timestamp: new Date()
         });
 
       } catch (ragError) {
         console.error('RAG query failed, falling back to standard mode:', ragError.message);
         response = await getStandardResponse(message, session);
+        engine = 'gpt-only';
       }
     } else {
       console.log('💬 Using standard mode');
       response = await getStandardResponse(message, session);
+      engine = 'gpt-only';
     }
 
     // Add to conversation history
@@ -143,7 +230,8 @@ app.post('/api/chat', async (req, res) => {
       response,
       sessionId: currentSessionId,
       timestamp: new Date().toISOString(),
-      mode: shouldUseRAG ? 'rag' : 'standard'
+      mode: engine,
+      engine: engine
     };
 
     // Include RAG metadata if available
@@ -249,11 +337,21 @@ app.get('/api/session/:sessionId', (req, res) => {
 // Enhanced health endpoint
 app.get('/api/health', async (req, res) => {
   let ragStats = null;
+  let mcpStats = null;
+
   if (ragReady) {
     try {
       ragStats = await ragEngine.getStats();
     } catch (error) {
       console.error('Error getting RAG stats:', error.message);
+    }
+  }
+
+  if (mcpRagReady) {
+    try {
+      mcpStats = await mcpRagEngine.getStats();
+    } catch (error) {
+      console.error('Error getting MCP stats:', error.message);
     }
   }
 
@@ -263,7 +361,14 @@ app.get('/api/health', async (req, res) => {
     openaiConfigured: !!process.env.OPENAI_API_KEY,
     pineconeConfigured: !!process.env.PINECONE_API_KEY,
     ragEnabled: ragReady,
+    mcpRagEnabled: mcpRagReady,
     ragStats,
+    mcpStats,
+    engines: {
+      standard: ragReady,
+      mcp: mcpRagReady,
+      capabilities: mcpRagReady ? mcpRagEngine.getMCPCapabilities() : null
+    },
     model: 'gpt-4',
     sessionsActive: sessions.size
   });
@@ -312,6 +417,123 @@ app.get('/api/rag/stats', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to get RAG stats',
+      details: error.message
+    });
+  }
+});
+
+// MCP-specific endpoints
+app.get('/api/mcp/stats', async (req, res) => {
+  if (!mcpRagReady) {
+    return res.status(503).json({ error: 'MCP RAG system not available' });
+  }
+
+  try {
+    const stats = await mcpRagEngine.getStats();
+    const capabilities = mcpRagEngine.getMCPCapabilities();
+    res.json({
+      ...stats,
+      capabilities
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to get MCP stats',
+      details: error.message
+    });
+  }
+});
+
+app.post('/api/mcp/reindex', async (req, res) => {
+  if (!mcpRagReady) {
+    return res.status(503).json({ error: 'MCP RAG system not available' });
+  }
+
+  try {
+    let scraper;
+    let content;
+
+    console.log('Using MCP RAG engine for reindexing with auto-embedding');
+    const SimpleScraper = require('./simple-scraper');
+    scraper = new SimpleScraper();
+    content = await scraper.scrapeAllSources();
+
+    // Use MCP RAG engine for embedding and storage
+    await mcpRagEngine.embedAndStore(content);
+
+    res.json({
+      success: true,
+      message: 'MCP reindexing completed',
+      documentsProcessed: content.length,
+      engine: 'mcp',
+      features: ['auto-embedding', 'advanced-metadata']
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'MCP reindexing failed',
+      details: error.message
+    });
+  }
+});
+
+app.post('/api/mcp/benchmark', async (req, res) => {
+  const { query = 'Què és el Museu Guimerà?', iterations = 3 } = req.body;
+
+  if (!mcpRagReady || !ragReady) {
+    return res.status(503).json({
+      error: 'Both RAG systems must be available for benchmarking',
+      available: { standard: ragReady, mcp: mcpRagReady }
+    });
+  }
+
+  try {
+    console.log(`🏃 Running benchmark: "${query}" (${iterations} iterations)`);
+
+    const results = {
+      query,
+      iterations,
+      timestamp: new Date().toISOString(),
+      standard: { times: [], avgTime: 0, avgConfidence: 0 },
+      mcp: { times: [], avgTime: 0, avgConfidence: 0 }
+    };
+
+    // Benchmark standard RAG
+    for (let i = 0; i < iterations; i++) {
+      const start = Date.now();
+      const result = await ragEngine.query(query);
+      const time = Date.now() - start;
+      results.standard.times.push(time);
+      results.standard.avgConfidence += result.confidence;
+    }
+
+    // Benchmark MCP RAG
+    for (let i = 0; i < iterations; i++) {
+      const start = Date.now();
+      const result = await mcpRagEngine.query(query, {
+        useReranking: true,
+        rerankModel: 'pinecone-rerank-v0'
+      });
+      const time = Date.now() - start;
+      results.mcp.times.push(time);
+      results.mcp.avgConfidence += result.confidence;
+    }
+
+    // Calculate averages
+    results.standard.avgTime = results.standard.times.reduce((a, b) => a + b) / iterations;
+    results.standard.avgConfidence = results.standard.avgConfidence / iterations;
+    results.mcp.avgTime = results.mcp.times.reduce((a, b) => a + b) / iterations;
+    results.mcp.avgConfidence = results.mcp.avgConfidence / iterations;
+
+    // Add improvement metrics
+    results.improvement = {
+      timeRatio: results.standard.avgTime / results.mcp.avgTime,
+      confidenceImprovement: results.mcp.avgConfidence - results.standard.avgConfidence,
+      recommendation: results.mcp.avgConfidence > results.standard.avgConfidence ? 'mcp' : 'standard'
+    };
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Benchmark failed',
       details: error.message
     });
   }
