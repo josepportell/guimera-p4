@@ -4,7 +4,7 @@
   "description": "Guimera AI Backend with HTTP scraper",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node enhanced-server.js",
     "dev": "nodemon server.js",
     "postinstall": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=false npx playwright install chromium",
     "test": "echo \"Error: no test specified\" && exit 1"
