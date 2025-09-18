@@ -13,16 +13,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pinecone-database/pinecone": "^6.1.2",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "langchain": "^0.1.0",
     "node-cron": "^4.2.1",
     "openai": "^5.20.3",
-    "@pinecone-database/pinecone": "^1.1.2",
-    "langchain": "^0.1.0",
-    "playwright": "^1.40.0",
-    "cheerio": "^1.0.0-rc.12",
-    "axios": "^1.6.0"
+    "playwright": "^1.40.0"
   },
   "devDependencies": {
     "@types/node": "^24.5.1",
