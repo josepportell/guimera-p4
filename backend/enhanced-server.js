@@ -69,6 +69,7 @@ app.get('/admin/dashboard.html', adminAuth, (req, res) => {
 
 // Admin API routes
 app.use('/content', adminRoutes);
+app.use('/api/admin', adminRoutes);
 
 const sessions = new Map();
 
