@@ -413,7 +413,9 @@
         let refreshInterval;
 
         async function apiCall(endpoint, options = {}) {
-            const url = `${API_BASE}/api/admin${endpoint}?token=${ADMIN_TOKEN}`;
+            // Properly handle existing query parameters
+            const separator = endpoint.includes('?') ? '&' : '?';
+            const url = `${API_BASE}/api/admin${endpoint}${separator}token=${ADMIN_TOKEN}`;
 
             try {
                 const response = await fetch(url, {
