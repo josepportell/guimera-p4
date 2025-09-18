@@ -67,7 +67,7 @@ const RAG_CONFIG = {
   // Vector database configuration
   vectorDB: {
     provider: 'pinecone', // or 'weaviate' for self-hosted
-    indexName: 'guimera-knowledge',
+    indexName: process.env.PINECONE_INDEX_NAME || 'guimera-knowledge',
     namespace: 'main',
     topK: 20,
     includeMetadata: true

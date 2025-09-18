@@ -8,9 +8,10 @@ class GuimeraRAGEngine {
       apiKey: process.env.OPENAI_API_KEY
     });
 
-    // Modern Pinecone initialization (auto-detects region from API key)
+    // Pinecone initialization with environment
     this.pinecone = new Pinecone({
-      apiKey: process.env.PINECONE_API_KEY
+      apiKey: process.env.PINECONE_API_KEY,
+      environment: process.env.PINECONE_ENVIRONMENT || 'aped-4627-b74a'
     });
 
     this.index = null;
@@ -239,15 +240,30 @@ Contingut: ${metadata.content}
   // Utility method to get system statistics
   async getStats() {
     try {
+      if (!this.index) {
+        console.log('📊 Index not initialized yet');
+        return null;
+      }
+
       const stats = await this.index.describeIndexStats();
+      console.log(`📊 Pinecone Stats - Vectors: ${stats.totalVectorCount}, Dimension: ${stats.dimension}`);
       return {
         totalVectors: stats.totalVectorCount,
         dimension: stats.dimension,
         namespaces: stats.namespaces
       };
     } catch (error) {
-      console.error('Error getting stats:', error.message);
-      return null;
+      if (error.message.includes('404')) {
+        console.error(`❌ Index "${RAG_CONFIG.vectorDB.indexName}" not found. Please create it first.`);
+      } else {
+        console.error('❌ Error getting stats:', error.message);
+      }
+      return {
+        totalVectors: 0,
+        dimension: 0,
+        namespaces: {},
+        error: error.message
+      };
     }
   }
 }
