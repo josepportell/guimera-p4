@@ -276,11 +276,14 @@ app.post('/api/rag/reindex', async (req, res) => {
   }
 
   try {
-    const MultiDomainScraper = require('./multi-domain-scraper');
-    const scraper = new MultiDomainScraper();
+    let scraper;
+    let content;
 
-    // Scrape content
-    const content = await scraper.scrapeAllSources();
+    // Always use SimpleScraper for now (Playwright has path issues on Render)
+    console.log('Using HTTP scraper for reliable content extraction');
+    const SimpleScraper = require('./simple-scraper');
+    scraper = new SimpleScraper();
+    content = await scraper.scrapeAllSources();
 
     // Embed and store
     await ragEngine.embedAndStore(content);

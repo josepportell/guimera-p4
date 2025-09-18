@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Guimera AI Backend with HTTP scraper",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
