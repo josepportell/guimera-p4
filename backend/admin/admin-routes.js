@@ -5,8 +5,8 @@ const path = require('path');
 // Conditionally require RAG modules
 let GuimeraRAGEngine, MultiDomainScraper;
 try {
-  GuimeraRAGEngine = require('../rag/rag-engine');
-  MultiDomainScraper = require('../rag/multi-domain-scraper');
+  GuimeraRAGEngine = require('../rag-engine');
+  MultiDomainScraper = require('../multi-domain-scraper');
 } catch (error) {
   console.warn('⚠️ RAG modules not available - admin will run in limited mode');
 }
